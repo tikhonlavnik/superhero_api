@@ -1,13 +1,11 @@
 import logging
-from abc import ABC
-from typing import List, Sequence
+from typing import Sequence
 
 from fastapi import HTTPException
 from sqlalchemy import select, and_
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# from app.src.api.exceptions.exceptions import NotFoundError
 from app.src.domain.models.superhero import Superhero
 from app.src.domain.repositories.base_superhero_repo import IHeroRepository
 from app.src.dto.hero_dto import SuperheroBaseDTO, SuperheroFilter

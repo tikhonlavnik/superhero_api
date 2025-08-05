@@ -24,15 +24,6 @@ class SuperheroService:
         self.repo = repo
         self.api_service = api_service
 
-    # async def create_hero(self, body: dict) -> SuperheroFullDTO:
-    #     hero_data = await self.api_service.get_hero_data(body.get("name"))
-    #     if not hero_data:
-    #         raise NotFoundError(entity=f"Hero with name '{body.get("name")}'")
-    #
-    #     upload_data = {"name": hero_data.get("name"), **hero_data.get("powerstats")}
-    #     hero = await self.repo.create(SuperheroBaseDTO(**upload_data))
-    #     return SuperheroFullDTO.model_validate(hero.to_dict())
-
     async def create_hero(self, body: dict) -> SuperheroFullDTO:
         try:
             hero_name = body.get("name")
