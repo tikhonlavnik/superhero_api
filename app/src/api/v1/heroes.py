@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 from starlette import status
 
 from app.dependencies import get_hero_service
+from app.docs.responses import GET_HEROES_RESPONSES, CREATE_HERO_RESPONSES
 from app.src.api.exceptions.exceptions import AppError
 from app.src.dto.hero_dto import (
     SuperheroFullDTO,
@@ -18,41 +19,10 @@ hero_router = APIRouter(prefix="/hero")
 @hero_router.post(
     "",
     status_code=status.HTTP_201_CREATED,
-    responses={
-        status.HTTP_409_CONFLICT: {
-            "description": "This hero is already added",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "detail": "This hero is already added",
-                        "type": "HTTPException",
-                    }
-                }
-            },
-        },
-        status.HTTP_404_NOT_FOUND: {
-            "description": "Hero is not found in heroes API",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "detail": "This hero is not found",
-                        "type": "NotFoundError",
-                    }
-                }
-            },
-        },
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "Error in heroes API",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "detail": "Error in heroes API",
-                        "type": "HTTPException",
-                    }
-                }
-            },
-        },
-    },
+    responses=CREATE_HERO_RESPONSES,
+    response_model=SuperheroFullDTO,
+    summary="Add a new superhero",
+    description="Adds superhero to database after validating through external API",
 )
 async def create_hero(
     body: SuperheroCreateDTO, service: SuperheroService = Depends(get_hero_service)
@@ -66,19 +36,9 @@ async def create_hero(
 @hero_router.get(
     "",
     status_code=status.HTTP_200_OK,
-    responses={
-        status.HTTP_404_NOT_FOUND: {
-            "description": "Heroes are not found by filters",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "detail": "Heroes are not found by filters",
-                        "type": "NotFoundError",
-                    }
-                }
-            },
-        },
-    },
+    responses=GET_HEROES_RESPONSES,
+    response_model=List[SuperheroFullDTO],
+    summary="Get filtered heroes",
 )
 async def get_heroes(
     filters: SuperheroFilter = Depends(),
